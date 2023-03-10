@@ -11,14 +11,40 @@
                 姓名:{{ v.name }}--年龄:{{ v.age }}
             </li>
         </ul>
+        <br>
+        <h1>sum的数值的10倍:{{ bigNum }}</h1>
+        <input type="text" v-model="info" placeholder="请输入格式为:name age的形式" @keyup.enter="addPerson">
+        <br>
+        输入名字: <input type="text" v-model="delInfo" placeholder="请输入要删除人的姓名" @keyup.enter="delPerson" />
     </div>
 </template>
 <script>
-import { mapState } from 'vuex'
 export default {
     name: 'Person',
+    data() {
+        return {
+            info: '',
+            delInfo: ''
+        }
+    },
     computed: {
-        ...mapState(['personList'])
+        personList() {
+            return this.$store.state.personOption.personList
+        },
+        bigNum() {
+            return this.$store.getters['sumOption/bigNum']
+        }
+        // ...mapState(['personList', 'sum'])
+    },
+    methods: {
+        addPerson() {
+            this.$store.dispatch('personOption/addPerson', this.info)
+            this.info = ''
+        },
+        delPerson() {
+            this.$store.commit('personOption/DEL_PERSON', this.delInfo)
+            this.delInfo = ''
+        }
     }
 }
 </script>
